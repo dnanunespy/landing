@@ -1,0 +1,42 @@
+body {
+    background-color: white;
+
+}
+
+.principal{
+    background-color: lightblue;
+    width: 100%;
+    margin: 0 auto; /* Isso centraliza a div */
+    
+
+}
+
+.imagem-fundo{
+    width: 100%;
+    height: 100%;
+}
+
+.whats{
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    /*background-color: #91D6AC;*/
+    background-color: transparent;
+}
+
+.insta{
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+}
+
+
+.grid-item {
+    height: 60px;
+}

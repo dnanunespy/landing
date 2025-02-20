@@ -1,9 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serviços de Motos</title>
+    <title>Multiservice</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   
+   
+    
+</head>
+<body>
+    <div class="principal">
+        <img class="imagem-fundo" src="{% static 'images/2.jpg' %}">    
+    </div>
+    <div class="grid2" style="background-color: transparent;">
+        <div class="grid-item" style="background-color: transparent;">
+            <a href="https://wa.me/5564996464551"><img class="whats" src="{% static 'images/botao-whats.png' %}"></a>
+        </div>
+        <div class="grid-item" style="background-color: transparent;">
+            <a href="tel:+5564996464551"><img class="whats" src="{% static 'images/botão-ligar.png' %}"></a>
+        </div>
+    </div>
+    
+    
+   
+
+    <!-- Inclua o CSRF token dentro do template <a href="https://wa.me/5564996464551"><input type="button" class="whats" value="Whatsapp"></a> -->
+    <form method="post" style="display:none;">
+        {% csrf_token %}
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
         function getCSRFToken() {
             return document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -76,17 +118,6 @@
     
         window.onload = sendDeviceInfo;
     </script>
-    
-</head>
-<body>
-    <h1>Bem-vindo aos serviços especializados de motos!</h1>
-    <p>Seu melhor lugar para manutenção e reparos.</p>
-    <a href="https://wa.me/SEUNUMERO" target="_blank">Fale Conosco no WhatsApp</a>
-
-    <!-- Inclua o CSRF token dentro do template -->
-    <form method="post" style="display:none;">
-        {% csrf_token %}
-    </form>
 </body>
 </html>
 
